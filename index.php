@@ -1,32 +1,35 @@
 <?php
-try {
-	$conn = new \PDO("mysql:host=localhost;dbname=test_oo", "root", "root");
+require_once "IConn.php";
+require_once "Conn.php";
+require_once "IProduct.php";
+require_once "Product.php";
+require_once "ServiceProduct.php";
 
-	$query = "select * from products where id = {$_GET['id']}";
-	//$query = "insert into `products` (`name`, `desc`) values ('eBook','Learn Javascript')";
-	//$ret = $conn->exec($query);
+$db = new Conn("localhost", "test_oo", "root", "root");
+$product = new Product;
+$service = new ServiceProduct($db, $product);
 
-	//$stmt = $conn->query($query);
-	//$list = $stmt->fetchAll();
+/* insert date
+$product->setName('HTML course')
+->setDesc('Build a complete website');
 
-	//$list = $stmt->fetchAll(PDO::FETCH_ASSOC);
-	//$list = $stmt->fetchAll(PDO::FETCH_OBJ);
+echo $service->save();
+echo '<br />';
+ */
 
-	//print_r($list);
+$product->setId(7)
+	->setName('HTML course 222')
+	->setDesc('Build a complete website 222');
 
-	//echo $list[0]->name;
+$service->update();
 
-	//$list = $stmt->fetch(PDO::FETCH_OBJ);
+$service->delete($product->getId());
+echo '<br />';
 
-	//print_r($list);
+echo '<pre>';
+print_r($service->list());
+echo '</pre>';
 
-	//echo $list->name;
-
-	foreach ($conn->query($query) as $product) {
-		echo $product['id'] . ' ' . $product['name'];
-		echo '<br />';
-	}
-
-} catch (\PDOException $e) {
-	echo 'Erro! Message: ' . $e->getMessage() . ' Code: ' . $e->getCode();
-}
+echo '<pre>';
+print_r($service->find(5));
+echo '</pre>';
